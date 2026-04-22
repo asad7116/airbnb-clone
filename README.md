@@ -1,70 +1,121 @@
 # Getting Started with Create React App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project is an Airbnb-like front-end built with React and Material UI. It was bootstrapped with Create React App (CRA).
 
-## Available Scripts
+## Quick links
 
-In the project directory, you can run:
+- Start (dev): `npm start`
+- Install deps: `npm install`
+- Build (prod): `npm run build`
 
-### `npm start`
+## Prerequisites
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- Node.js (16.x or later recommended)
+- npm (comes with Node) or an alternative package manager (Yarn, pnpm). The instructions below use npm and Windows PowerShell.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Install
 
-### `npm test`
+Open a PowerShell terminal in the project root (`i:\airbnb-clone`) and run:
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```powershell
+npm install
+```
 
-### `npm run build`
+This will install dependencies listed in `package.json`.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Run (development)
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Start the development server (CRA):
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```powershell
+npm start
+```
 
-### `npm run eject`
+By default the app runs at http://localhost:3000. If that port is busy, CRA will offer another port and show it in the terminal.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## Build (production)
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Create an optimized production build:
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+```powershell
+npm run build
+```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+The `build/` folder will contain the production assets.
 
-## Learn More
+## Project structure (important files)
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+- `src/` — application source
+	- `App.js` — app entry
+	- `components/` — UI components (Cards, Filter, Header, MobileSearchBar)
+	- `assets/` — images and static data used by the UI
+- `public/` — static public files (index.html, manifest)
+- `package.json` — scripts & dependencies
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Known runtime / dev issues (observed)
 
-### Code Splitting
+When running this project locally the dev server starts successfully but the terminal may show a few warnings (non-blocking):
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+- ESLint warnings: some files use `==` instead of `===`, some `img` tags are missing `alt` attributes, and there are a few unused imports. These don't prevent the app from running but are good to fix for quality and accessibility.
+- A create-react-app related message: `babel-preset-react-app` imports `@babel/plugin-proposal-private-property-in-object` without declaring it. To silence the message you can add it as a devDependency (see below).
+- `npm install` may report audit warnings (vulnerabilities) typical for older CRA dependencies. Review and fix as needed.
 
-### Analyzing the Bundle Size
+Suggested quick fixes:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+- Replace `==` with `===` where appropriate to match ESLint rules.
+- Add `alt` attributes to decorative and meaningful `img` elements.
+- Remove unused imports (e.g., `Box`, `Button`, or `useState` where they are not used).
+- To silence the babel message, add the dev dependency and reinstall:
 
-### Making a Progressive Web App
+```powershell
+npm install --save-dev @babel/plugin-proposal-private-property-in-object
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+- Run `npm audit` and `npm audit fix` to auto-fix some security issues. Use `--force` only after reviewing breaking changes.
 
-### Advanced Configuration
+## Linting and tests
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+This project uses the default CRA linting / testing setup. To run tests:
 
-### Deployment
+```powershell
+npm test
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+ESLint runs automatically in the dev server; fix warnings by editing the files mentioned in the terminal output.
 
-### `npm run build` fails to minify
+## Developer notes & tips
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- When adding components follow the existing structure under `src/components/` and keep styles local (each component folder has `styles.css`).
+- Assets (images and fonts) live under `src/assets/`.
+- If you plan to upgrade major dependencies (React, MUI, react-scripts), do so carefully and run the app and tests after each upgrade.
+
+## Contributing
+
+1. Create a branch: `git checkout -b feat/your-feature`
+2. Make changes and add tests where appropriate.
+3. Run `npm install` and `npm start` to test locally.
+4. Open a pull request.
+
+## Troubleshooting
+
+- If `npm start` fails with a port conflict, either stop the other server or run the app on a different port (CRA will prompt to use another port).
+- If you see module resolution errors after changing dependencies, remove `node_modules/` and reinstall:
+
+```powershell
+Remove-Item -Recurse node_modules
+npm install
+```
+
+## License
+
+This repository does not include a license file. If you want to open-source it, consider adding a `LICENSE` (for example MIT).
+
+---
+
+If you'd like, I can also:
+
+- Fix the ESLint warnings automatically (small code edits) and re-run the dev server.
+- Add the suggested devDependency to eliminate the babel message and re-install.
+- Run `npm audit fix` and show which vulnerabilities remain.
+
+Tell me which follow-up you'd like and I'll do it.
